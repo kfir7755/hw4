@@ -13,8 +13,6 @@ public class LevelMostOccurrences {
         int currentLevel = 0;
         arrayDeque.add(node);
         while (!arrayDeque.isEmpty()) {
-            currentLevel++;
-
             while (!arrayDeque.isEmpty()) {
                 if (arrayDeque.peek().getLeft() != null)
                     childrenArrayDeque.add(arrayDeque.peek().getLeft());
@@ -29,10 +27,11 @@ public class LevelMostOccurrences {
                 }
                 arrayDeque.add(currentNode);
             }
-            if (occurrencesInLevel > maxOfAllLevels && occurrencesInLevel>0) {
+            if (occurrencesInLevel > maxOfAllLevels) {
                 levelToReturn = currentLevel;
                 maxOfAllLevels = occurrencesInLevel;
             }
+            currentLevel++;
             occurrencesInLevel=0;
         }
 
