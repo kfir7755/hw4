@@ -4,8 +4,8 @@ public class LevelMostOccurrences {
     public static int getLevelWithMostOccurrences(BinNode<Integer> node, int num) {
         ArrayDeque<BinNode> arrayDeque = new ArrayDeque<>();
         ArrayDeque<BinNode> childrenArrayDeque = new ArrayDeque<>();
-
         if (node == null) return -1;
+
         int size = 1;
         int levelToReturn = -1;
         int occurrencesInLevel = 0;
@@ -34,13 +34,6 @@ public class LevelMostOccurrences {
             }
             occurrencesInLevel=0;
         }
-
-
         return levelToReturn;
-//            while (size > 0) {
-//                BinNode binNode = arrayDeque.pop();
-//                size--;
-//            }
-
     }
 }
