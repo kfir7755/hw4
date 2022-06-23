@@ -21,8 +21,8 @@ public class MyReentrantLock implements Lock{
                  while (this.isLocked.get()) {
                     //find a way to make it wait
                  }
-                 this.isLocked.compareAndSet(false, true);
-                 this.owner = thread;
+                 boolean check= this.isLocked.compareAndSet(false, true);
+                 if (check) this.owner = thread;
              }
     }
 
@@ -39,7 +39,7 @@ public class MyReentrantLock implements Lock{
     }
 
     @Override
-    public void release(){
+    public void release() {
         if (this.isLocked.get() == false || Thread.currentThread() != owner) {
             throw new IllegalReleaseAttempt();
         }
