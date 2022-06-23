@@ -3,39 +3,43 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MyReentrantLock implements Lock{
 
     private AtomicBoolean isLocked;
-    private Thread owner;
+    private Thread owner = null;
 
     public MyReentrantLock() {
         this.isLocked = new AtomicBoolean(false);
-        this.owner = Thread.currentThread();
     }
 
     @Override
     public void close(){
         this.isLocked.set(true);
+        this.owner = Thread.currentThread();
     }
     @Override
     public void acquire(){
         Thread thread = Thread.currentThread();
-             while(thread != owner && this.isLocked.get()) {
-                 //need to find a way to wait without causing a Busy waiting
+             if (thread == this.owner && this.owner !=null) {
+                 while (this.isLocked.get()) {
+                    //find a way to make it wait
+                 }
+                 this.isLocked.compareAndSet(false, true);
+                 this.owner = thread;
              }
-             if (thread == owner) {this.isLocked.compareAndSet(false, true);}
     }
 
     @Override
     public boolean tryAcquire(){
         boolean check = false;
         try {
-            check = this.isLocked.compareAndSet(false, true);
-        } finally {
+            Thread thread = Thread.currentThread();
+                check = this.isLocked.compareAndSet(false, true);
+                if (check) this.owner = thread;
+            } finally {
             return check;
         }
     }
 
     @Override
     public void release(){
-        //the Thread.currentThread() != owner is causing errors for some reason
         if (this.isLocked.get() == false || Thread.currentThread() != owner) {
             throw new IllegalReleaseAttempt();
         }
