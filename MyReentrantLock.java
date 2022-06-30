@@ -26,7 +26,7 @@ public class MyReentrantLock implements Lock{
 
     /**
      * a function that tries to acquire and lock the lock until it succeeds
-     * @throws IllegalReleaseAttempt
+     * @throws IllegalReleaseAttempt when the thread is interrupted during sleep
      */
     @Override
     public void acquire(){
@@ -52,16 +52,13 @@ public class MyReentrantLock implements Lock{
     }
     /**
      * a function that releases the lock.
-     * @throws IllegalReleaseAttempt
+     * @throws IllegalReleaseAttempt when cannot release
      */
     @Override
     public void release() {
         if (!this.isLocked.get() || Thread.currentThread() != owner || this.counter < 1) {
            throw new IllegalReleaseAttempt();
         }
-//        if (!this.isLocked.get()) throw new IllegalReleaseAttempt("cant release an unlocked lock");
-//        if (Thread.currentThread() != owner) throw new IllegalReleaseAttempt("cant release if you are not owner");
-//        if (this.counter < 1) throw new IllegalReleaseAttempt("problem with count");
         if (--this.counter == 0) {
             this.isLocked = new AtomicBoolean();
             this.owner = null;
