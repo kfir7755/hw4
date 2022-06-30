@@ -1,4 +1,24 @@
 public class DateCalculator {
+    private final static int JANUARY= 1;
+    private final static int MARCH= 3;
+    private final static int APRIL= 4;
+    private final static int MAY= 5;
+    private final static int JUNE= 6;
+    private final static int JULY= 7;
+    private final static int AUGUST= 8;
+    private final static int SEPTEMBER= 9;
+    private final static int OCTOBER= 10;
+    private final static int NOVEMBER= 11;
+    private final static int DECEMBER= 12;
+    private final static int THIRTY_DAYS= 30;
+    private final static int THIRTY_ONE_DAYS= 31;
+    private final static int TWENTY_EIGHT_DAYS= 28;
+    private final static int TWENTY_NINE_DAYS= 29;
+    private final static int FOUR_HUNDRED_YEARS= 400;
+    private final static int ONE_HUNDRED_YEARS= 100;
+    private final static int FOUR_YEARS= 4;
+
+
 
     /**
      * this function checks if the date it gets is in a leap year or not
@@ -7,7 +27,7 @@ public class DateCalculator {
      */
     private static boolean isLeapYear(Date date) {
         int year = date.getYear();
-        return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+        return (year % FOUR_YEARS == 0 && year % ONE_HUNDRED_YEARS != 0) || year % FOUR_HUNDRED_YEARS == 0;
     }
 
     /**
@@ -17,11 +37,13 @@ public class DateCalculator {
      */
     private static int daysInThisMonth(Date date) {
         int monthNumber = date.getMonth();
-        if (monthNumber == 1 || monthNumber == 3 || monthNumber == 5 || monthNumber == 7 || monthNumber == 8 ||
-                monthNumber == 10 || monthNumber == 12) return 31;
-        if (monthNumber == 4 || monthNumber == 6 || monthNumber == 9 || monthNumber == 11) return 30;
-        if (isLeapYear(date)) return 29;
-        return 28;
+        if (monthNumber == JANUARY || monthNumber ==MARCH || monthNumber == MAY || monthNumber == JULY
+                || monthNumber == AUGUST || monthNumber == OCTOBER || monthNumber == DECEMBER)
+            return THIRTY_ONE_DAYS;
+        if (monthNumber == APRIL || monthNumber == JUNE || monthNumber == SEPTEMBER || monthNumber == NOVEMBER)
+            return THIRTY_DAYS;
+        if (isLeapYear(date)) return TWENTY_NINE_DAYS;
+        return TWENTY_EIGHT_DAYS;
     }
 
     /**
@@ -45,10 +67,10 @@ public class DateCalculator {
             if (num > daysLeftInThisMonth) {
                 num -= (daysLeftInThisMonth + 1);
                 // if we are in December, the next month will be in the next year
-                if (date.getMonth() != 12) {
+                if (date.getMonth() != DECEMBER) {
                     return addToDate(new Date(1, date.getMonth() + 1, date.getYear()), num);
                     //for the other months, we stay in the same year
-                } else return addToDate(new Date(1, 1, date.getYear() + 1), num);
+                } else return addToDate(new Date(1, JANUARY, date.getYear() + 1), num);
             } else {
                 // if we are in the right month (and year), calculate the date in num days from now and return it
                 return new Date(date.getDay() + num, date.getMonth(), date.getYear());
@@ -59,14 +81,14 @@ public class DateCalculator {
             if (-num > date.getDay()) {
                 num += date.getDay();
                 // if the month isn't January, we stay in the same year
-                if (date.getMonth() != 1) {
+                if (date.getMonth() != JANUARY) {
                     //check what is the last day of the previous month
                     int daysInMonthBefore = daysInThisMonth(new Date(1, date.getMonth()- 1, date.getYear()));
                     return addToDate(new Date(daysInMonthBefore, date.getMonth() - 1, date.getYear()), num);
                 } else{
                     // we are in January, the previous month is December
-                    int daysInMonthBefore = 31;
-                    return addToDate(new Date(daysInMonthBefore, 12, date.getYear() - 1), num);
+                    int daysInMonthBefore = THIRTY_ONE_DAYS;
+                    return addToDate(new Date(daysInMonthBefore, DECEMBER, date.getYear() - 1), num);
                 }
             } else {
                 //-num == day, it means we need to return the last day in the month of the previous month
@@ -79,7 +101,7 @@ public class DateCalculator {
                         return new Date (day, month, date.getYear());
                     }
                     //we moved to the previous year
-                    return new Date(31, 12,date.getYear()-1);
+                    return new Date(THIRTY_ONE_DAYS, DECEMBER,date.getYear()-1);
                 }
                 //we are in the right month (and year), return the date that was before |num| days
                 return new Date(date.getDay() + num, date.getMonth(), date.getYear());
