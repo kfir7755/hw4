@@ -26,6 +26,7 @@ public class MyReentrantLock implements Lock{
 
     /**
      * a function that tries to acquire and lock the lock until it succeeds
+     * @throws IllegalReleaseAttempt
      */
     @Override
     public void acquire(){
@@ -51,6 +52,7 @@ public class MyReentrantLock implements Lock{
     }
     /**
      * a function that releases the lock.
+     * @throws IllegalReleaseAttempt
      */
     @Override
     public void release() {
